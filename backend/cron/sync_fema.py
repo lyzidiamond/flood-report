@@ -3,6 +3,7 @@ import httpx
 import logging
 import os
 from datetime import datetime, timezone
+from typing import Optional
 
 import psycopg2
 from psycopg2.extras import execute_values
@@ -20,7 +21,7 @@ def get_db():
     return psycopg2.connect(os.environ["DATABASE_URL"])
 
 
-def get_last_sync(conn) -> str | None:
+def get_last_sync(conn) -> Optional[str]:
     with conn.cursor() as cur:
         cur.execute("SELECT value FROM sync_state WHERE key = 'last_fema_sync'")
         row = cur.fetchone()
@@ -40,7 +41,7 @@ def set_last_sync(conn, ts: str):
     conn.commit()
 
 
-async def fetch_fema_declarations(since: str | None) -> list[dict]:
+async def fetch_fema_declarations(since: Optional[str]) -> list[dict]:
     records = []
     skip = 0
     filters = ["incidentType eq 'Flood'"]
@@ -79,7 +80,7 @@ def get_county_centroids(conn, fips_codes: list[str]) -> dict[str, tuple[float, 
         return {row[0]: (row[1], row[2]) for row in cur.fetchall()}
 
 
-def parse_date(val: str | None) -> str | None:
+def parse_date(val: Optional[str]) -> Optional[str]:
     return val[:10] if val else None
 
 
@@ -125,9 +126,9 @@ async def sync():
         fips = fips if len(fips) == 5 else None
         centroid = centroids.get(fips) if fips else None
         lng, lat = centroid if centroid else (None, None)
-        geom_wkt = Point(lng, lat).wkt if lng is not None else None
+        geom_wkt = Point(lng, lat).wkt if lng is not None and lat is not None else None
 
-        if lng is not None:
+        if lng is not None and lat is not None:
             delta_centroids.add((round(lng, 4), round(lat, 4)))
 
         rows.append((

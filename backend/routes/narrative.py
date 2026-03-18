@@ -141,5 +141,6 @@ async def invalidate_narratives(lat: float, lng: float, radius_km: float = 100):
             """,
             lat, lng, radius_m,
         )
-    count = int(result.split()[-1])
+    # asyncpg returns a status string like "UPDATE 3" — split on space to get the count
+    count = int(result.split(" ")[1])
     return {"invalidated": count}
