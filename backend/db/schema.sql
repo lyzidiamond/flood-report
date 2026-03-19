@@ -2,17 +2,17 @@
 CREATE EXTENSION IF NOT EXISTS postgis;
 
 -- County centroids lookup (seeded once from Census TIGER data)
-CREATE TABLE counties (
+CREATE TABLE IF NOT EXISTS counties (
     fips        CHAR(5) PRIMARY KEY,
     name        TEXT NOT NULL,
     state       TEXT NOT NULL,
     population  INTEGER,
     geom        GEOMETRY(Point, 4326) NOT NULL
 );
-CREATE INDEX counties_geom_idx ON counties USING GIST(geom);
+CREATE INDEX IF NOT EXISTS counties_geom_idx ON counties USING GIST(geom);
 
 -- Flood disaster declarations (synced nightly from OpenFEMA)
-CREATE TABLE flood_declarations (
+CREATE TABLE IF NOT EXISTS flood_declarations (
     disaster_number     INTEGER PRIMARY KEY,
     state               TEXT NOT NULL,
     county_fips         CHAR(5),
@@ -26,11 +26,11 @@ CREATE TABLE flood_declarations (
     created_at          TIMESTAMPTZ DEFAULT NOW(),
     updated_at          TIMESTAMPTZ DEFAULT NOW()
 );
-CREATE INDEX flood_declarations_geom_idx ON flood_declarations USING GIST(geom);
-CREATE INDEX flood_declarations_date_idx ON flood_declarations(incident_begin_date);
+CREATE INDEX IF NOT EXISTS flood_declarations_geom_idx ON flood_declarations USING GIST(geom);
+CREATE INDEX IF NOT EXISTS flood_declarations_date_idx ON flood_declarations(incident_begin_date);
 
 -- Cached AI narratives (keyed by location hash)
-CREATE TABLE ai_narratives (
+CREATE TABLE IF NOT EXISTS ai_narratives (
     id              SERIAL PRIMARY KEY,
     location_hash   TEXT UNIQUE NOT NULL,
     lat             DOUBLE PRECISION NOT NULL,
@@ -42,10 +42,10 @@ CREATE TABLE ai_narratives (
     generated_at    TIMESTAMPTZ DEFAULT NOW(),
     invalidated_at  TIMESTAMPTZ
 );
-CREATE INDEX ai_narratives_geom_idx ON ai_narratives USING GIST(geom);
+CREATE INDEX IF NOT EXISTS ai_narratives_geom_idx ON ai_narratives USING GIST(geom);
 
 -- Sync state (tracks last successful OpenFEMA sync timestamp)
-CREATE TABLE sync_state (
+CREATE TABLE IF NOT EXISTS sync_state (
     key         TEXT PRIMARY KEY,
     value       TEXT NOT NULL,
     updated_at  TIMESTAMPTZ DEFAULT NOW()

@@ -117,11 +117,17 @@ def seed(conn, counties: dict, population: dict):
 
 
 def main():
-    counties = fetch_gazetteer()
-    population = fetch_population()
-
     conn = psycopg2.connect(os.environ["DATABASE_URL"])
     try:
+        with conn.cursor() as cur:
+            cur.execute("SELECT COUNT(*) FROM counties")
+            count = cur.fetchone()[0]
+        if count > 0:
+            log.info(f"Counties already seeded ({count} rows), skipping")
+            return
+
+        counties = fetch_gazetteer()
+        population = fetch_population()
         seed(conn, counties, population)
     finally:
         conn.close()
