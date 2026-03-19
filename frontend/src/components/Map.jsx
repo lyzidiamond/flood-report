@@ -57,6 +57,7 @@ export default function Map({ onMapClick }) {
       )
       onMapClick(e.lngLat.lat, e.lngLat.lng);
     });
+    map.addControl(new maplibregl.AttributionControl(), 'top-left');
 
     return () => map.remove();
   }, []);
