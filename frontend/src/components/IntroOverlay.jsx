@@ -1,7 +1,6 @@
 export default function IntroOverlay({ onDismiss }) {
   return (
     <div
-      onClick={onDismiss}
       style={{
         position: "absolute",
         inset: 0,
@@ -25,7 +24,7 @@ export default function IntroOverlay({ onDismiss }) {
           gap: "16px",
         }}
       >
-        <h1 style={{ margin: 0, fontSize: "22px" }}>FloodReport</h1>
+        <h1 style={{ margin: 0, fontSize: "22px", color: "#333" }}>FloodReport</h1>
         <p style={{ margin: 0, lineHeight: "1.6", color: "#333" }}>
           Click anywhere on the map to see 70 years of federal flood disaster
           history for that location — including the current FEMA flood zone
@@ -39,7 +38,7 @@ export default function IntroOverlay({ onDismiss }) {
             border: "none",
             borderRadius: "4px",
             padding: "10px 20px",
-            fontSize: "15px",
+            fontSize: "18px",
             cursor: "pointer",
             alignSelf: "flex-start",
           }}

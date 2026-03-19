@@ -1,12 +1,15 @@
+import "@picocss/pico/css/pico.classless.min.css";
+import "../panel.css";
+
 export default function NarrativePanel({ lat, lng, narrative, loading, error, onClose }) {
   return (
-    <div style={{
+    <div data-theme="light" className="narrative-panel" style={{
       position: "absolute",
       top: 0,
       right: 0,
       width: "400px",
       height: "100vh",
-      background: "white",
+      background: "var(--pico-background-color)",
       boxShadow: "-2px 0 8px rgba(0,0,0,0.15)",
       overflowY: "auto",
       padding: "24px",
@@ -18,18 +21,14 @@ export default function NarrativePanel({ lat, lng, narrative, loading, error, on
         <h2 style={{ margin: 0, fontSize: "16px" }}>
           {lat.toFixed(4)}, {lng.toFixed(4)}
         </h2>
-        <button onClick={onClose} aria-label="Close" style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px" }}>
+        <button onClick={onClose} aria-label="Close" className="secondary outline" style={{ width: "auto", padding: "4px 10px" }}>
           ×
         </button>
       </div>
 
-      {loading && (
-        <p style={{ color: "#666" }}>Analyzing flood history...</p>
-      )}
+      {loading && <p><em>Analyzing flood history...</em></p>}
 
-      {error && (
-        <p style={{ color: "#c00" }}>{error}</p>
-      )}
+      {error && <p style={{ color: "var(--pico-color-red-550)" }}>{error}</p>}
 
       {narrative && (
         <>
@@ -47,10 +46,12 @@ export default function NarrativePanel({ lat, lng, narrative, loading, error, on
               Zone {narrative.flood_zone}
             </div>
           )}
-          <p style={{ margin: 0, lineHeight: "1.6" }}>{narrative.narrative}</p>
-          <p style={{ margin: 0, fontSize: "12px", color: "#999" }}>
+          <div style={{ lineHeight: "1.6" }}
+            dangerouslySetInnerHTML={{ __html: narrative.narrative }}
+          />
+          <small style={{ color: "var(--pico-muted-color)" }}>
             {narrative.cached ? "Cached" : "Generated"} · {new Date(narrative.generated_at).toLocaleDateString()}
-          </p>
+          </small>
         </>
       )}
     </div>

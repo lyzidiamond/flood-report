@@ -12,10 +12,6 @@ export default function App() {
   const [error, setError] = useState(null);
 
   async function handleMapClick(lat, lng) {
-    if (showIntro) {
-      setShowIntro(false);
-      return;
-    }
     setSelection({ lat, lng });
     setNarrative(null);
     setError(null);
