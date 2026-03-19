@@ -1,0 +1,16 @@
+/* reset maplibre controls that pico restyles */
+.maplibregl-ctrl button {
+  all: revert;
+}
+
+/* smaller font sizes for the narrative panel */
+.narrative-panel,
+.narrative-panel p,
+.narrative-panel h2,
+.narrative-panel small {
+  font-size: revert;
+}
+
+.narrative-panel {
+  font-size: 15px;
+}
