@@ -4,3 +4,5 @@ notes.md
 .DS_Store
 .vscode
 floodreport-debug-summary.md
+package-lock.json
+node_modules/
