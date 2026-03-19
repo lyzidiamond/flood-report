@@ -14,6 +14,7 @@ export default function Map({ onMapClick }) {
     });
 
     map.on("click", (e) => {
+      console.log("Map clicked at", e.lngLat);
       onMapClick(e.lngLat.lat, e.lngLat.lng);
     });
 
