@@ -144,6 +144,12 @@ async def sync():
             geom_wkt,
         ))
 
+    # add deduplication by disaster_number before batching to avoid FEMA data duplicates
+    seen = {}
+    for row in rows:
+        seen[row[0]] = row
+    rows = list(seen.values())
+
     # bulk upsert in batches
     for i in range(0, len(rows), BATCH_SIZE):
         batch = rows[i:i + BATCH_SIZE]
