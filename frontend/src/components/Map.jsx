@@ -15,6 +15,7 @@ export default function Map({ onMapClick }) {
       style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
       center: [-98.5795, 39.8283], // center of US
       zoom: 3,
+      attributionControl: false,
     });
 
     const popup = new maplibregl.Popup({ closeButton: false, closeOnClick: false });
